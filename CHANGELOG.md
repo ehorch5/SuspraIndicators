@@ -1,3 +1,5 @@
+# Uncle Eric updates this changelog when he accepts a pull request
+
 ## 0.0.24
 - add 'ideal world' resource usage
 
