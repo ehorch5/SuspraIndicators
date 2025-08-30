@@ -15,50 +15,67 @@
       
       <form @submit.prevent="onNext">
         <!-- S1 -->
-        <v-text-field
-          v-model="s1"
-          label="What is the square footage of your current house or apartment? (Do not include outdoor space)"
-          type="number"
-          min="0"
-          :rules="[v => v === '' || v >= 0 || 'Must be a positive number']"
-          class="mb-4"
-          placeholder="e.g. 1200"
-        />
-        <v-select
-          v-model="s1_special"
-          :items="s1SpecialOptions"
-          label="Or select an option"
-          class="mb-4"
-        />
+        <div class="mb-6">
+          <h3 class="mb-4">What is the square footage of your current house or apartment? (Do not include outdoor space)</h3>
+          <v-radio-group v-model="s1_response_type" class="mb-4">
+            <v-radio value="enter" label="Enter a value"></v-radio>
+            <v-radio value="dont_know" label="Don't know"></v-radio>
+          </v-radio-group>
+          
+          <v-text-field
+            v-if="s1_response_type === 'enter'"
+            v-model="s1"
+            label="Square footage"
+            type="number"
+            min="0"
+            :rules="[v => v === '' || v >= 0 || 'Must be a positive number']"
+            class="mb-4"
+            placeholder="e.g. 1200"
+          />
+        </div>
+        
         <!-- S1a -->
-        <v-select
-          v-model="s1a"
-          :items="s1aOptions"
-          label="Which of the following best describes where you live?"
-          class="mb-4"
-        />
-        <v-text-field
-          v-if="s1a === 96"
-          v-model="s1a_other"
-          label="Please specify:"
-          class="mb-4"
-        />
+        <div class="mb-6">
+          <h3 class="mb-4">Which of the following best describes where you live?</h3>
+          <v-radio-group v-model="s1a" class="mb-4">
+            <v-radio value="1" label="Apartment in a shared building"></v-radio>
+            <v-radio value="2" label="Condominium or townhouse (attached unit you own)"></v-radio>
+            <v-radio value="3" label="Single-family detached house"></v-radio>
+            <v-radio value="4" label="Duplex, triplex, or row house (shared walls, separate units)"></v-radio>
+            <v-radio value="5" label="Mobile or manufactured home"></v-radio>
+            <v-radio value="6" label="Tiny home or accessory dwelling unit (ADU)"></v-radio>
+            <v-radio value="96" label="Other (please specify)"></v-radio>
+            <v-radio value="98" label="Don't Know"></v-radio>
+          </v-radio-group>
+          
+          <v-text-field
+            v-if="s1a === '96'"
+            v-model="s1a_other"
+            label="Please specify:"
+            class="mb-4"
+          />
+        </div>
+        
         <!-- S2 -->
-        <v-text-field
-          v-model="s2"
-          label="Including yourself, how many people currently live or stay in your household?"
-          type="number"
-          min="1"
-          :rules="[v => v === '' || v > 0 || 'Must be at least 1']"
-          class="mb-4"
-          placeholder="e.g. 3"
-        />
-        <v-select
-          v-model="s2_special"
-          :items="s2SpecialOptions"
-          label="Or select an option"
-          class="mb-4"
-        />
+        <div class="mb-6">
+          <h3 class="mb-4">Including yourself, how many people currently live or stay in your household?</h3>
+          <v-radio-group v-model="s2_response_type" class="mb-4">
+            <v-radio value="enter" label="Enter a value"></v-radio>
+            <v-radio value="dont_know" label="Don't know"></v-radio>
+          </v-radio-group>
+          
+          <v-text-field
+            v-if="s2_response_type === 'enter'"
+            v-model="s2"
+            label="Number of people"
+            type="number"
+            min="1"
+            :rules="[v => v === '' || v > 0 || 'Must be at least 1']"
+            class="mb-4"
+            placeholder="e.g. 3"
+          />
+        </div>
+        
         <div class="d-flex justify-space-between mt-6">
           <v-btn color="secondary" @click="onBack">Back</v-btn>
           <v-btn color="primary" type="submit">Next</v-btn>
@@ -76,10 +93,12 @@ import { openDB } from 'idb'
 const router = useRouter()
 
 const s1 = ref('')
+const s1_response_type = ref('enter')
 const s1_special = ref(null)
 const s1a = ref(null)
 const s1a_other = ref('')
 const s2 = ref('')
+const s2_response_type = ref('enter')
 const s2_special = ref(null)
 
 const s1SpecialOptions = [
